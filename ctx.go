@@ -1,14 +1,14 @@
 package fiberkit
 
-import "github.com/gofiber/fiber/v2"
+import "github.com/gofiber/fiber/v3"
 
 // Set stores a value in Fiber locals.
-func Set(ctx *fiber.Ctx, key string, value any) {
+func Set(ctx fiber.Ctx, key string, value any) {
 	ctx.Locals(key, value)
 }
 
 // Get reads a value from Fiber locals and returns nil on missing or mismatched types.
-func Get[T any](ctx *fiber.Ctx, key string) *T {
+func Get[T any](ctx fiber.Ctx, key string) *T {
 	value := ctx.Locals(key)
 	if value == nil {
 		return nil

@@ -9,7 +9,7 @@ type ListTasksQuery struct {
 }
 
 type TaskParams struct {
-	ID string `params:"id" validate:"required"`
+	ID string `uri:"id" validate:"required"`
 }
 
 type UpdateTaskRequest struct {

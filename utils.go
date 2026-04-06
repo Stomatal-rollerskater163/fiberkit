@@ -5,7 +5,7 @@ import (
 	"reflect"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 func validateInput(value any) error {
@@ -25,13 +25,13 @@ func validateInput(value any) error {
 	return validator.New().Struct(value)
 }
 
-func invalidInput(ctx *fiber.Ctx, target string) error {
+func invalidInput(ctx fiber.Ctx, target string) error {
 	return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 		"error": "invalid " + target,
 	})
 }
 
-func invalidValidation(ctx *fiber.Ctx, err error) error {
+func invalidValidation(ctx fiber.Ctx, err error) error {
 	payload := fiber.Map{
 		"error": "validation failed",
 	}

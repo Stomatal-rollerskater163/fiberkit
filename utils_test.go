@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 type validationHelperPayload struct {
@@ -34,7 +34,7 @@ func TestValidateInputSupportsStructPointer(t *testing.T) {
 
 func TestInvalidValidationOmitsDetailsForGenericError(t *testing.T) {
 	app := fiber.New()
-	app.Get("/", func(ctx *fiber.Ctx) error {
+	app.Get("/", func(ctx fiber.Ctx) error {
 		return invalidValidation(ctx, errors.New("boom"))
 	})
 

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 type createTaskRequest struct {
@@ -15,7 +15,7 @@ type createTaskRequest struct {
 
 func TestBodyParsesValidJSON(t *testing.T) {
 	app := fiber.New()
-	app.Post("/tasks", Body(func(ctx *fiber.Ctx, body *createTaskRequest) error {
+	app.Post("/tasks", Body(func(ctx fiber.Ctx, body *createTaskRequest) error {
 		return ctx.JSON(body)
 	}))
 
@@ -43,7 +43,7 @@ func TestBodyParsesValidJSON(t *testing.T) {
 
 func TestBodyRejectsInvalidJSON(t *testing.T) {
 	app := fiber.New()
-	app.Post("/tasks", Body(func(ctx *fiber.Ctx, body *createTaskRequest) error {
+	app.Post("/tasks", Body(func(ctx fiber.Ctx, body *createTaskRequest) error {
 		return ctx.JSON(body)
 	}))
 
@@ -71,7 +71,7 @@ func TestBodyRejectsInvalidJSON(t *testing.T) {
 
 func TestBodyValidatesInput(t *testing.T) {
 	app := fiber.New()
-	app.Post("/tasks", Body(func(ctx *fiber.Ctx, body *createTaskRequest) error {
+	app.Post("/tasks", Body(func(ctx fiber.Ctx, body *createTaskRequest) error {
 		return ctx.JSON(body)
 	}))
 

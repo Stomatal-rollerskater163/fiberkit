@@ -4,7 +4,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 type testUser struct {
@@ -13,7 +13,7 @@ type testUser struct {
 
 func TestContextSetGet(t *testing.T) {
 	app := fiber.New()
-	app.Get("/", func(ctx *fiber.Ctx) error {
+	app.Get("/", func(ctx fiber.Ctx) error {
 		Set(ctx, "user", &testUser{ID: "7"})
 
 		user := Get[testUser](ctx, "user")

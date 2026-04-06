@@ -5,29 +5,29 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 type getUserParams struct {
-	ID string `params:"id" validate:"required"`
+	ID string `uri:"id" validate:"required"`
 }
 
 type numericUserParams struct {
-	ID int `params:"id"`
+	ID int `uri:"id"`
 }
 
 type validatedUserParams struct {
-	ID string `params:"id" validate:"min=5"`
+	ID string `uri:"id" validate:"min=5"`
 }
 
 func TestParamsWorkForMiddleware(t *testing.T) {
 	app := fiber.New()
 	app.Get("/users/:id",
-		Params(func(ctx *fiber.Ctx, params *getUserParams) error {
+		Params(func(ctx fiber.Ctx, params *getUserParams) error {
 			Set(ctx, "targetUserID", params.ID)
 			return ctx.Next()
 		}),
-		func(ctx *fiber.Ctx) error {
+		func(ctx fiber.Ctx) error {
 			id := Get[string](ctx, "targetUserID")
 			if id == nil {
 				return ctx.SendStatus(fiber.StatusInternalServerError)
@@ -58,7 +58,7 @@ func TestParamsWorkForMiddleware(t *testing.T) {
 
 func TestParamsRejectsInvalidParamType(t *testing.T) {
 	app := fiber.New()
-	app.Get("/users/:id", Params(func(ctx *fiber.Ctx, params *numericUserParams) error {
+	app.Get("/users/:id", Params(func(ctx fiber.Ctx, params *numericUserParams) error {
 		return ctx.SendStatus(fiber.StatusNoContent)
 	}))
 
@@ -84,7 +84,7 @@ func TestParamsRejectsInvalidParamType(t *testing.T) {
 
 func TestParamsValidatesInput(t *testing.T) {
 	app := fiber.New()
-	app.Get("/users/:id", Params(func(ctx *fiber.Ctx, params *validatedUserParams) error {
+	app.Get("/users/:id", Params(func(ctx fiber.Ctx, params *validatedUserParams) error {
 		return ctx.SendStatus(fiber.StatusNoContent)
 	}))
 

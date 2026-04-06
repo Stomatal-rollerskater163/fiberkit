@@ -7,9 +7,9 @@ Lightweight typed request binding helpers for Fiber.
 ## Before ❌
 
 ```go
-app.Post("/tasks", func(ctx *fiber.Ctx) error {
+app.Post("/tasks", func(ctx fiber.Ctx) error {
 	var body CreateTaskRequest
-	if err := ctx.BodyParser(&body); err != nil {
+	if err := ctx.Bind().Body(&body); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "invalid body",
 		})
@@ -30,7 +30,7 @@ app.Post("/tasks", func(ctx *fiber.Ctx) error {
 ```go
 app.Post("/tasks", fiberkit.Body(CreateTask))
 
-func CreateTask(ctx *fiber.Ctx, body *CreateTaskRequest) error {
+func CreateTask(ctx fiber.Ctx, body *CreateTaskRequest) error {
 	return ctx.JSON(body)
 }
 ```
@@ -38,19 +38,19 @@ func CreateTask(ctx *fiber.Ctx, body *CreateTaskRequest) error {
 ## Install 🚀
 
 ```bash
-go get github.com/vo0ov/fiberkit
+go get github.com/vo0ov/fiberkit/v2
 ```
 
 ## API 🛠️
 
 ```go
-func Body[T any](handler func(*fiber.Ctx, *T) error) fiber.Handler
-func Query[T any](handler func(*fiber.Ctx, *T) error) fiber.Handler
-func Params[T any](handler func(*fiber.Ctx, *T) error) fiber.Handler
-func ParamsBody[P any, B any](handler func(*fiber.Ctx, *P, *B) error) fiber.Handler
+func Body[T any](handler func(fiber.Ctx, *T) error) fiber.Handler
+func Query[T any](handler func(fiber.Ctx, *T) error) fiber.Handler
+func Params[T any](handler func(fiber.Ctx, *T) error) fiber.Handler
+func ParamsBody[P any, B any](handler func(fiber.Ctx, *P, *B) error) fiber.Handler
 
-func Set(ctx *fiber.Ctx, key string, value any)
-func Get[T any](ctx *fiber.Ctx, key string) *T
+func Set(ctx fiber.Ctx, key string, value any)
+func Get[T any](ctx fiber.Ctx, key string) *T
 ```
 
 ## Usage 💡
@@ -64,7 +64,7 @@ type CreateTaskRequest struct {
 
 app.Post("/tasks", fiberkit.Body(CreateTask))
 
-func CreateTask(ctx *fiber.Ctx, body *CreateTaskRequest) error {
+func CreateTask(ctx fiber.Ctx, body *CreateTaskRequest) error {
 	return ctx.Status(fiber.StatusCreated).JSON(body)
 }
 ```
@@ -78,7 +78,7 @@ type ListTasksQuery struct {
 
 app.Get("/tasks", fiberkit.Query(ListTasks))
 
-func ListTasks(ctx *fiber.Ctx, query *ListTasksQuery) error {
+func ListTasks(ctx fiber.Ctx, query *ListTasksQuery) error {
 	return ctx.JSON(query)
 }
 ```
@@ -87,21 +87,23 @@ func ListTasks(ctx *fiber.Ctx, query *ListTasksQuery) error {
 
 ```go
 type GetTaskParams struct {
-	ID string `params:"id" validate:"required"`
+	ID string `uri:"id" validate:"required"`
 }
 
 app.Get("/tasks/:id", fiberkit.Params(GetTask))
 
-func GetTask(ctx *fiber.Ctx, params *GetTaskParams) error {
+func GetTask(ctx fiber.Ctx, params *GetTaskParams) error {
 	return ctx.JSON(params)
 }
 ```
+
+Note: on Fiber v3 route params are bound with `uri:"..."` tags.
 
 ### Params + Body
 
 ```go
 type UpdateTaskParams struct {
-	ID string `params:"id" validate:"required"`
+	ID string `uri:"id" validate:"required"`
 }
 
 type UpdateTaskRequest struct {
@@ -110,7 +112,7 @@ type UpdateTaskRequest struct {
 
 app.Patch("/tasks/:id", fiberkit.ParamsBody(UpdateTask))
 
-func UpdateTask(ctx *fiber.Ctx, params *UpdateTaskParams, body *UpdateTaskRequest) error {
+func UpdateTask(ctx fiber.Ctx, params *UpdateTaskParams, body *UpdateTaskRequest) error {
 	return ctx.JSON(fiber.Map{
 		"id":   params.ID,
 		"name": body.Name,
@@ -128,12 +130,12 @@ type User struct {
 }
 
 type GetUserParams struct {
-	ID string `params:"id" validate:"required"`
+	ID string `uri:"id" validate:"required"`
 }
 
 type UserLoader struct{}
 
-func (l *UserLoader) Load(ctx *fiber.Ctx, params *GetUserParams) error {
+func (l *UserLoader) Load(ctx fiber.Ctx, params *GetUserParams) error {
 	fiberkit.Set(ctx, "targetUser", &User{ID: params.ID})
 	return ctx.Next()
 }

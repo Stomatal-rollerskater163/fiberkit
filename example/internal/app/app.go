@@ -4,8 +4,8 @@ import (
 	"example/internal/handlers"
 	"example/internal/middlewares"
 
-	"github.com/gofiber/fiber/v2"
-	"github.com/vo0ov/fiberkit"
+	"github.com/gofiber/fiber/v3"
+	"github.com/vo0ov/fiberkit/v2"
 )
 
 func New() *fiber.App {
