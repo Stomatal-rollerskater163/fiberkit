@@ -4,7 +4,7 @@ go 1.26.1
 
 require (
 	github.com/gofiber/fiber/v2 v2.52.12
-	github.com/vo0ov/fiberkit v0.0.0
+	github.com/vo0ov/fiberkit v1.0.0
 )
 
 require (
@@ -27,5 +27,3 @@ require (
 	golang.org/x/sys v0.42.0 // indirect
 	golang.org/x/text v0.35.0 // indirect
 )
-
-replace github.com/vo0ov/fiberkit => ..
