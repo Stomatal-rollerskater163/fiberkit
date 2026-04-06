@@ -7,8 +7,6 @@ require (
 	github.com/vo0ov/fiberkit/v3 v3.0.0
 )
 
-replace github.com/vo0ov/fiberkit/v3 => ..
-
 require (
 	github.com/andybalholm/brotli v1.2.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
